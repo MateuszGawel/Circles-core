@@ -1,27 +1,26 @@
 package com.mateusz.circles;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mateusz.circles.enums.ScreenType;
+import com.mateusz.circles.handlers.ScreensManager;
 
-public class Circles extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
-	
+public class Circles extends Game {
+
 	@Override
-	public void create () {
-		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+	public void create() {
+		ScreensManager.create();
+		ScreensManager.prepareManager(this);
+		ScreensManager.getInstance().createScreen(ScreenType.SIMULATION);
 	}
 
 	@Override
-	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
+	public void render() {
+		try {
+			super.render();
+		} catch (Exception e) {
+			e.printStackTrace();
+			Gdx.app.exit();
+		}
 	}
 }
