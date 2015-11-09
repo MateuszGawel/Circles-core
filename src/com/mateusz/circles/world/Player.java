@@ -9,17 +9,23 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mateusz.circles.handlers.InputHandler;
+import com.mateusz.client.MessageHandler;
+import com.mateusz.client.OnlineEntity;
 
-public class Player extends Actor {
+public class Player extends Actor implements OnlineEntity{
 
 	private Body body;
 	private GameWorld gameWorld;
 	private InputHandler inputHandler;
+	private MessageHandler messageHandler;
 	
-	public Player(GameWorld gameWorld) {
+	public Player(String playerName, GameWorld gameWorld) {
 		this.gameWorld = gameWorld;
+		setName(playerName);
 		createBody();
 		inputHandler = new InputHandler(gameWorld);
+		messageHandler = new MessageHandler();
+		messageHandler.connect(playerName);
 	}
 
 	private void createBody() {
@@ -43,12 +49,29 @@ public class Player extends Actor {
 	public void act(float delta) {
 		super.act(delta);
 		inputHandler.handleInput();
+		messageHandler.send(delta);
+		messageHandler.listen();
 	}
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		// TODO Auto-generated method stub
 		super.draw(batch, parentAlpha);
+	}
+
+	@Override
+	public String getEntityName() {
+		return getName();
+	}
+
+	@Override
+	public float getEntityX() {
+		return body.getPosition().x;
+	}
+
+	@Override
+	public float getEntityY() {
+		return body.getPosition().y;
 	}
 
 }

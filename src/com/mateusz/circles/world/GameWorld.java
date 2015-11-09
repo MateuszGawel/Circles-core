@@ -1,22 +1,21 @@
 package com.mateusz.circles.world;
 
 import static com.mateusz.circles.vars.Box2DVars.PPM;
-import static com.mateusz.circles.vars.Box2DVars.SCREEN_WIDTH;
 import static com.mateusz.circles.vars.Box2DVars.SCREEN_HEIGHT;
+import static com.mateusz.circles.vars.Box2DVars.SCREEN_WIDTH;
+
+import java.util.Random;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.mateusz.circles.Circles;
 import com.mateusz.circles.handlers.MyContactListener;
 
 public class GameWorld {
 
-	private Image background;
 	private World world;
 	private Box2DDebugRenderer debugRenderer;
 	private Stage gameWorldStage;
@@ -38,7 +37,7 @@ public class GameWorld {
 	}
 
 	public void init() {
-		player = new Player(this);
+		player = new Player("GRACZ "+String.valueOf(new Random().nextInt(100) + 1), this);
 		gameWorldStage.addActor(player);
 	}
 
