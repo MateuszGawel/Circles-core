@@ -5,6 +5,14 @@ sourceCompatibility = 1.6
 
 sourceSets.main.java.srcDirs = [ "src/" ]
 
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile('com.fasterxml.jackson.core:jackson-core:2.6.3')
+    compile('com.fasterxml.jackson.core:jackson-databind:2.6.3')
+}
 
 eclipse.project {
     name = appName + "-core"

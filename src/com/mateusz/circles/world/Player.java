@@ -15,15 +15,19 @@ import com.mateusz.client.OnlineEntity;
 public class Player extends Actor implements OnlineEntity{
 
 	private Body body;
-	private GameWorld gameWorld;
+	private final GameWorld gameWorld;
 	private InputHandler inputHandler;
 	private MessageHandler messageHandler;
-	
-	public Player(String playerName, GameWorld gameWorld) {
-		this.gameWorld = gameWorld;
+	private boolean controlledByPlayer;
+
+	public Player(String playerName, GameWorld myGameWorld) {
+		this.gameWorld = myGameWorld;
 		setName(playerName);
 		createBody();
 		inputHandler = new InputHandler(gameWorld);
+		
+		//entities handler to po prostu kolekcja wszystkich playerow, trzeba to jakos ladnie polaczyc z API
+//		entitiesHandler = new EntitiesHandler();
 		messageHandler = new MessageHandler();
 		messageHandler.connect(playerName);
 	}
@@ -60,6 +64,11 @@ public class Player extends Actor implements OnlineEntity{
 	}
 
 	@Override
+	public void init() {
+
+	}
+
+	@Override
 	public String getEntityName() {
 		return getName();
 	}
@@ -74,4 +83,12 @@ public class Player extends Actor implements OnlineEntity{
 		return body.getPosition().y;
 	}
 
+	@Override
+	public boolean isControlledByPlayer() {
+		return controlledByPlayer;
+	}
+	
+	public void setControlledByPlayer(boolean controlledByPlayer){
+		this.controlledByPlayer = controlledByPlayer;
+	}
 }
