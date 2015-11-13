@@ -19,7 +19,7 @@ public class Player extends Actor implements OnlineEntity {
 	private final GameWorld gameWorld;
 	private InputHandler inputHandler;
 	private MessageHandler messageHandler;
-	private MyMessage.MessageBuilder synchronousMessageBuilder;
+	private MyMessageBuilder synchronousMessageBuilder;
 	private boolean controlledByPlayer;
 	private String playerName;
 
@@ -32,7 +32,7 @@ public class Player extends Actor implements OnlineEntity {
 	}
 
 	public void connectToServer() {
-		synchronousMessageBuilder = new MyMessage.MessageBuilder().type(MessageType.UPDATE).senderName(playerName);
+		synchronousMessageBuilder = new MyMessageBuilder(MessageType.UPDATE, playerName);
 		messageHandler = new MyMessageHandler(synchronousMessageBuilder);
 		messageHandler.connect(playerName);
 	}

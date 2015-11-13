@@ -1,43 +1,38 @@
 package com.mateusz.circles.world;
 
+import java.io.Serializable;
+
 import com.badlogic.gdx.math.Vector2;
 import com.mateusz.client.Message;
 import com.mateusz.client.MessageType;
 
-public class MyMessage extends Message {
+public class MyMessage extends Message implements Serializable {
 
-	private static final long serialVersionUID = 7996609214439888638L;
-	private final Vector2 position;
+	private static final long serialVersionUID = 8587188729074776736L;
+	private Vector2 position;
 
-	public static class MessageBuilder extends Message.MessageBuilder<MessageBuilder> {
-		private Vector2 position;
-
-		public MessageBuilder() {
-			super();
-		}
-
-		public MessageBuilder(MessageType type, String content, String senderName, Vector2 position) {
-			super(type, content, senderName);
-		}
-
-		public MessageBuilder position(Vector2 position) {
-			this.position = position;
-			return this;
-		}
-
-		// tutaj bedzie masa setterow, a metoda build bedzie to konwertowac to
-		// byte[] i zapisywa jako content albo tego typu pole
-		public MyMessage build() {
-			return new MyMessage(this);
-		}
+	public MyMessage() {
+		super();
 	}
 
-	protected MyMessage(MessageBuilder messageBuilder) {
+	public MyMessage(MessageType type, Object content, String senderName, Vector2 position) {
+		super(type, content, senderName);
+		this.position = position;
+	}
+
+	public MyMessage(MyMessageBuilder messageBuilder) {
 		super(messageBuilder);
-		position = messageBuilder.position;
+		this.position = messageBuilder.getPosition();
 	}
 
 	public Vector2 getPosition() {
 		return position;
 	}
+
+	@Override
+	public String toString() {
+		return "MyMessage [position=" + position + ", getType()=" + getType() + ", getContent()=" + getContent() + ", getSenderName()=" + getSenderName() + ", toString()="
+				+ super.toString() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + "]";
+	}
+
 }
