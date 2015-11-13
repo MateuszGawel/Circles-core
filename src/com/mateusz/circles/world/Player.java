@@ -10,17 +10,19 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mateusz.circles.handlers.InputHandler;
 import com.mateusz.client.MessageHandler;
+import com.mateusz.client.MessageType;
 import com.mateusz.client.OnlineEntity;
 
-public class Player extends Actor implements OnlineEntity{
+public class Player extends Actor implements OnlineEntity {
 
 	private Body body;
 	private final GameWorld gameWorld;
 	private InputHandler inputHandler;
 	private MessageHandler messageHandler;
+	private MyMessage.MessageBuilder synchronousMessageBuilder;
 	private boolean controlledByPlayer;
 	private String playerName;
-	
+
 	public Player(String playerName) {
 		this.gameWorld = GameWorld.getInstance();
 		this.playerName = playerName;
@@ -28,12 +30,13 @@ public class Player extends Actor implements OnlineEntity{
 		setName(playerName);
 		createBody();
 	}
-	
-	public void connectToServer(){
-		messageHandler = new MyMessageHandler();
+
+	public void connectToServer() {
+		synchronousMessageBuilder = new MyMessage.MessageBuilder().type(MessageType.UPDATE).senderName(playerName);
+		messageHandler = new MyMessageHandler(synchronousMessageBuilder);
 		messageHandler.connect(playerName);
 	}
-	
+
 	private void createBody() {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
@@ -45,6 +48,8 @@ public class Player extends Actor implements OnlineEntity{
 
 		body = gameWorld.getWorld().createBody(bodyDef);
 		body.createFixture(fixDef);
+		body.setTransform(new Vector2(10, 5), 0);
+		body.setLinearDamping(1);
 	}
 
 	public void move(Vector2 force) {
@@ -55,7 +60,7 @@ public class Player extends Actor implements OnlineEntity{
 	public void act(float delta) {
 		super.act(delta);
 		inputHandler.handleInput();
-		messageHandler.send(delta);
+		messageHandler.sendBufferedMessage(delta);
 		messageHandler.listen();
 	}
 
@@ -89,8 +94,8 @@ public class Player extends Actor implements OnlineEntity{
 	public boolean isControlledByPlayer() {
 		return controlledByPlayer;
 	}
-	
-	public void setControlledByPlayer(boolean controlledByPlayer){
+
+	public void setControlledByPlayer(boolean controlledByPlayer) {
 		this.controlledByPlayer = controlledByPlayer;
 	}
 
