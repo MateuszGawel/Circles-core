@@ -16,6 +16,7 @@ import com.mateusz.circles.handlers.MyContactListener;
 
 public class GameWorld {
 
+	private static GameWorld gameWorld = new GameWorld();
 	private World world;
 	private Box2DDebugRenderer debugRenderer;
 	private Stage gameWorldStage;
@@ -37,7 +38,8 @@ public class GameWorld {
 	}
 
 	public void init() {
-		player = new Player("GRACZ "+String.valueOf(new Random().nextInt(100) + 1), this);
+		player = new Player("GRACZ " + String.valueOf(new Random().nextInt(100) + 1));
+		player.connectToServer();
 		gameWorldStage.addActor(player);
 	}
 
@@ -67,4 +69,7 @@ public class GameWorld {
 		return player;
 	}
 
+	public static GameWorld getInstance() {
+		return gameWorld;
+	}
 }

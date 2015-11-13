@@ -13,7 +13,7 @@ public class SimulationScreen extends BaseScreen
 	public SimulationScreen(Circles planets)
 	{
 		super(planets);
-		this.gameWorld = new GameWorld();
+		this.gameWorld = GameWorld.getInstance();
 	}
 	
 	@Override

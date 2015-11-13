@@ -19,19 +19,21 @@ public class Player extends Actor implements OnlineEntity{
 	private InputHandler inputHandler;
 	private MessageHandler messageHandler;
 	private boolean controlledByPlayer;
-
-	public Player(String playerName, GameWorld myGameWorld) {
-		this.gameWorld = myGameWorld;
+	private String playerName;
+	
+	public Player(String playerName) {
+		this.gameWorld = GameWorld.getInstance();
+		this.playerName = playerName;
+		this.inputHandler = new InputHandler(gameWorld);
 		setName(playerName);
 		createBody();
-		inputHandler = new InputHandler(gameWorld);
-		
-		//entities handler to po prostu kolekcja wszystkich playerow, trzeba to jakos ladnie polaczyc z API
-//		entitiesHandler = new EntitiesHandler();
-		messageHandler = new MessageHandler();
+	}
+	
+	public void connectToServer(){
+		messageHandler = new MyMessageHandler();
 		messageHandler.connect(playerName);
 	}
-
+	
 	private void createBody() {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
@@ -90,5 +92,35 @@ public class Player extends Actor implements OnlineEntity{
 	
 	public void setControlledByPlayer(boolean controlledByPlayer){
 		this.controlledByPlayer = controlledByPlayer;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((playerName == null) ? 0 : playerName.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Player other = (Player) obj;
+		if (playerName == null) {
+			if (other.playerName != null)
+				return false;
+		} else if (!playerName.equals(other.playerName))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Player [controlledByPlayer=" + controlledByPlayer + ", playerName=" + playerName + "]";
 	}
 }
