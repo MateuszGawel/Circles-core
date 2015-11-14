@@ -9,16 +9,15 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mateusz.circles.handlers.InputHandler;
-import com.mateusz.client.MessageHandler;
+import com.mateusz.client.AbstractMessageHandler;
 import com.mateusz.client.MessageType;
-import com.mateusz.client.OnlineEntity;
 
 public class Player extends Actor implements OnlineEntity {
 
 	private Body body;
 	private final GameWorld gameWorld;
 	private InputHandler inputHandler;
-	private MessageHandler messageHandler;
+	private AbstractMessageHandler messageHandler;
 	private MyMessageBuilder synchronousMessageBuilder;
 	private boolean controlledByPlayer;
 	private String playerName;
@@ -32,7 +31,7 @@ public class Player extends Actor implements OnlineEntity {
 	}
 
 	public void connectToServer() {
-		synchronousMessageBuilder = new MyMessageBuilder(MessageType.UPDATE, playerName);
+		synchronousMessageBuilder = new MyMessageBuilder(MessageType.UPDATE_STATE, playerName);
 		messageHandler = new MyMessageHandler(synchronousMessageBuilder);
 		messageHandler.connect(playerName);
 	}
@@ -60,6 +59,7 @@ public class Player extends Actor implements OnlineEntity {
 	public void act(float delta) {
 		super.act(delta);
 		inputHandler.handleInput();
+		synchronousMessageBuilder.position(body.getPosition());
 		messageHandler.sendBufferedMessage(delta);
 		messageHandler.listen();
 	}
@@ -68,26 +68,6 @@ public class Player extends Actor implements OnlineEntity {
 	public void draw(Batch batch, float parentAlpha) {
 		// TODO Auto-generated method stub
 		super.draw(batch, parentAlpha);
-	}
-
-	@Override
-	public void init() {
-
-	}
-
-	@Override
-	public String getEntityName() {
-		return getName();
-	}
-
-	@Override
-	public float getEntityX() {
-		return body.getPosition().x;
-	}
-
-	@Override
-	public float getEntityY() {
-		return body.getPosition().y;
 	}
 
 	@Override
@@ -127,5 +107,21 @@ public class Player extends Actor implements OnlineEntity {
 	@Override
 	public String toString() {
 		return "Player [controlledByPlayer=" + controlledByPlayer + ", playerName=" + playerName + "]";
+	}
+
+	@Override
+	public Vector2 getPosition() {
+		return body.getPosition();
+	}
+
+	@Override
+	public void setPosition(Vector2 position) {
+		body.setTransform(position, 0);
+	}
+
+	@Override
+	public void init() {
+		// TODO Auto-generated method stub
+
 	}
 }
