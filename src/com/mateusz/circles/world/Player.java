@@ -8,9 +8,13 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.mateusz.api.AbstractMessageHandler;
+import com.mateusz.api.GameCallback;
+import com.mateusz.api.MessageType;
 import com.mateusz.circles.handlers.InputHandler;
-import com.mateusz.client.AbstractMessageHandler;
-import com.mateusz.client.MessageType;
+import com.mateusz.circles.multiplayer.GameCallbackImpl;
+import com.mateusz.circles.multiplayer.MyMessageBuilder;
+import com.mateusz.circles.multiplayer.MyMessageHandler;
 
 public class Player extends Actor implements OnlineEntity {
 
@@ -21,7 +25,8 @@ public class Player extends Actor implements OnlineEntity {
 	private MyMessageBuilder synchronousMessageBuilder;
 	private boolean controlledByPlayer;
 	private String playerName;
-
+	private GameCallback gameCallback;
+	
 	public Player(String playerName) {
 		this.gameWorld = GameWorld.getInstance();
 		this.playerName = playerName;
@@ -32,7 +37,8 @@ public class Player extends Actor implements OnlineEntity {
 
 	public void connectToServer() {
 		synchronousMessageBuilder = new MyMessageBuilder(MessageType.UPDATE_STATE, playerName);
-		messageHandler = new MyMessageHandler(synchronousMessageBuilder);
+		gameCallback = new GameCallbackImpl(gameWorld);
+		messageHandler = new MyMessageHandler(synchronousMessageBuilder, gameCallback);
 		messageHandler.connect(playerName);
 	}
 

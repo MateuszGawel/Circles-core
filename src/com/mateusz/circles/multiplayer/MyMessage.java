@@ -1,8 +1,8 @@
-package com.mateusz.circles.world;
+package com.mateusz.circles.multiplayer;
 
 import java.io.Serializable;
 
-import com.mateusz.client.Message;
+import com.mateusz.api.Message;
 
 public class MyMessage extends Message implements Serializable {
 

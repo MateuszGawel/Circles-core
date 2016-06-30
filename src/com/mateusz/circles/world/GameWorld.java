@@ -22,6 +22,8 @@ public class GameWorld {
 	private Stage gameWorldStage;
 	private Player player;
 
+	private boolean gameStarted;
+	
 	public GameWorld() {
 		world = new World(new Vector2(0, 0), true);
 		debugRenderer = new Box2DDebugRenderer();
@@ -71,5 +73,13 @@ public class GameWorld {
 
 	public static GameWorld getInstance() {
 		return gameWorld;
+	}
+
+	public boolean isGameStarted() {
+		return gameStarted;
+	}
+
+	public void setGameStarted(boolean gameStarted) {
+		this.gameStarted = gameStarted;
 	}
 }

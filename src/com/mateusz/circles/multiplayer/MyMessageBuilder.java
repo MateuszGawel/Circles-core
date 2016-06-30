@@ -1,8 +1,8 @@
-package com.mateusz.circles.world;
+package com.mateusz.circles.multiplayer;
 
 import com.badlogic.gdx.math.Vector2;
-import com.mateusz.client.MessageBuilder;
-import com.mateusz.client.MessageType;
+import com.mateusz.api.MessageBuilder;
+import com.mateusz.api.MessageType;
 
 public class MyMessageBuilder extends MessageBuilder<MyMessageBuilder> {
 

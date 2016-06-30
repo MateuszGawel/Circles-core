@@ -1,21 +1,24 @@
-package com.mateusz.circles.world;
+package com.mateusz.circles.multiplayer;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import com.badlogic.gdx.math.Vector2;
-import com.mateusz.client.AbstractMessageHandler;
-import com.mateusz.client.JSONConverter;
-import com.mateusz.client.MessageBuilder;
-import com.mateusz.client.MessageType;
+import com.mateusz.api.GameCallback;
+import com.mateusz.api.MessageBuilder;
+import com.mateusz.api.MessageType;
+import com.mateusz.circles.world.OnlineEntity;
+import com.mateusz.circles.world.Player;
+import com.mateusz.local.LocalMessageHandler;
+import com.mateusz.utils.JSONConverter;
 
-public class MyMessageHandler extends AbstractMessageHandler {
+public class MyMessageHandler extends LocalMessageHandler {
 
 	private static final short NUMBER_OF_ENTITIES = 3;
 	private static Map<String, OnlineEntity> entities = new HashMap<String, OnlineEntity>(NUMBER_OF_ENTITIES);
 
-	public MyMessageHandler(MessageBuilder<?> synchronousMessageBuilder) {
-		super(synchronousMessageBuilder);
+	public MyMessageHandler(MessageBuilder<?> synchronousMessageBuilder, GameCallback gameCallback) {
+		super(synchronousMessageBuilder, gameCallback);
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -38,7 +41,6 @@ public class MyMessageHandler extends AbstractMessageHandler {
 				OnlineEntity player = new Player(message.getSenderName());
 				player.init();
 				entities.put(message.getSenderName(), player);
-				entities.values().forEach((e) -> System.out.println(e));
 				if (message.getContent() != null && !message.getContent().equals("introduce")) {
 					sendMessage(new MessageBuilder(MessageType.SUBSCRIBE, getPlayerName()).content("introduce").build());
 				}
